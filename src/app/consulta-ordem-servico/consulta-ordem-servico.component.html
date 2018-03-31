@@ -1,3 +1,147 @@
-<p>
-  consulta-ordem-servico works!
-</p>
+<div class="container" style="text-align:center">
+  <hr>
+  <!-- Parâmetros -->
+  <div class="row">
+      <div style="text-align:left" class="col-3">
+       Data inicial <input type="date" class="form-control" aria-label="Default" [(ngModel)]="parametrosConsulta.dataInicial">
+      </div>
+      <div style="text-align:left" class="col-3">
+       Data Final <input type="date" class="form-control" aria-label="Default"  [(ngModel)]="parametrosConsulta.dataFinal">
+      </div>
+      <div style="text-align:left" class="col-4">
+       Paciente <input type="text" class="form-control" aria-label="Default" aria-describedby="nomePaciente"  [(ngModel)]="parametrosConsulta.nomePaciente">
+      </div>
+  </div>
+
+  <div class="row">
+      <div style="text-align:left" class="col-3">
+      Convênio <input type="text" class="form-control" aria-label="Default" aria-describedby="nomeConvenio"  [(ngModel)]="parametrosConsulta.nomeConvenio">
+      </div>
+      <div style="text-align:left" class="col-3">
+      Posto de Coleta <input type="text" class="form-control" aria-label="Default" aria-describedby="postoColeta"  [(ngModel)]="parametrosConsulta.nomePostoColeta">
+      </div>
+      <div style="text-align:left" class="col-4">
+      Médico <input type="text" class="form-control" aria-label="Default" aria-describedby="nomeMedico" [(ngModel)]="parametrosConsulta.nomeMedico">
+      </div>
+  </div>
+
+  <div class="row">
+      <div style="text-align:left" class="col-3">
+      Especialidade <input type="text" class="form-control" aria-label="Default" aria-describedby="nomeEspecialidade" [(ngModel)]="parametrosConsulta.nomeEspecialidade">
+      </div>
+      <div style="text-align:left" class="col-3">
+        <br/>
+          <button type="button" class="btn btn-primary" (click)="consultarOrdensServico('default')" >Consultar</button>
+      </div>
+  </div>
+
+  <div class="row">
+      <div style="text-align:rigth" class="col-1">
+        <br/>
+          <button [disabled]="habilitarForward == false" type="button" class="btn btn-primary" (click)="consultarOrdensServico('forward')" >Anterior</button>
+      </div>
+      <div style="text-align:left" class="col-1">
+          <br/>
+            <button [disabled]="habilitarNext == false" type="button" class="btn btn-primary" (click)="consultarOrdensServico('next')" >Próxima</button>
+        </div>
+  </div>
+<br/>
+
+<!-- Msgs de erro/aviso -->
+<div *ngIf="msgErro.length > 0">
+  <strong>As datas: inicial e final são obrigatórias!</strong>
+</div>
+
+<!-- Tabela com os dados de ordens de serviço-->
+<div *ngIf="ordensServico.length > 0; else nenhumaOrdemServico">
+    <div class="row">
+        <table class="table table-striped table-sm">
+            <thead>
+              <tr>
+                <th scope="col">Controle</th>
+                <th scope="col">Data</th>
+                <th scope="col">Paciente</th>
+                <th scope="col">Médico</th>
+                <th scope="col">Especialidade</th>
+                <th scope="col">Detalhes</th>
+                <th scope="col">Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let os of ordensServico; let i = index">
+                <td>{{os.numeroOrdemServico}}</td>
+                <td>{{os.dataCadastroOS}}</td>
+                <td style="text-align:left">{{os.nomePaciente}}</td>
+                <td style="text-align:left">{{os.nomeMedico}}</td>
+                <td style="text-align:left">{{os.nomeEspecialidade}}</td>
+                <td>
+                    <button type="button" class="btn btn-primary" (click)="setCurrentOrdemServico(os)"
+                    data-toggle="modal" data-target="#modalDetalhes">Detalhes</button>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-warning" [routerLink]="['/ordem-servico-edicao', os.numeroOrdemServico]">Alterar</button>
+                    <button type="button" class="btn btn-danger" data-target="#modalExclusao" data-toggle="modal"
+                    (click)="setCurrentOrdemServico(os)">Excluir</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+      </div>
+</div>
+
+<ng-template #nenhumaOrdemServico>
+  Nenhuma informação para exibir
+</ng-template>
+
+    <!-- Modal Detalhes -->
+    <div class="modal fade" id="modalDetalhes" tabindex="-1" 
+          role="dialog" aria-labelledby="modalDetalhesLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="modalDetalhesLabel">Detalhes Ordem de Serviço</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body" style="text-align:left">
+                  <strong>Número de Controle:</strong>{{ currentOrdemServico.numeroOrdemServico}}<br/>
+                  <strong>Data de cadastro:</strong>{{currentOrdemServico.dataCadastroOS}}<br/>
+                  <strong>Paciente:</strong>{{currentOrdemServico.nomePaciente}}<br/>
+                  <strong>Convênio:</strong>{{currentOrdemServico.nomeConvenio}}<br/>
+                  <strong>Posto de Coleta:</strong>{{currentOrdemServico.nomePostoColeta}}<br/>
+                  <strong>Médico:</strong>{{currentOrdemServico.nomeMedico}}<br/>
+                  <strong>Especialidade:</strong>{{currentOrdemServico.nomeEspecialidade}}<br/>
+                  <strong>Cidade (paciente):</strong>{{currentOrdemServico.cidadePaciente}}<br/>
+                  <strong>Cidade (coleta):</strong>{{currentOrdemServico.cidadeColeta}}<br/>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>
+                </div>
+              </div>
+            </div>
+        </div>
+
+    <!-- Modal Exclusão -->
+    <div class="modal fade" id="modalExclusao" tabindex="-1" 
+          role="dialog" aria-labelledby="modalExclusaoLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="modalExclusaoLabel">Confirmação</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body" style="text-align:left">
+                  Tem certeza da exclusão da ordem de serviço número:  
+                  <strong>{{currentOrdemServico.numeroOrdemServico}}</strong>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="apagarOrdemServico(currentOrdemServico.numeroOrdemServico)">Sim</button>
+                  <button type="button" class="btn btn-primary" data-dismiss="modal">Não</button>
+                </div>
+              </div>
+            </div>
+        </div>
+</div> 

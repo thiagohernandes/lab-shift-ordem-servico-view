@@ -1,6 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { FormsModule } from '@angular/forms'; // ngModule
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { ConsultaOrdemServicoComponent } from './consulta-ordem-servico/consulta-ordem-servico.component';
@@ -8,6 +10,10 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { NovaOrdemServicoComponent } from './nova-ordem-servico/nova-ordem-servico.component';
 
 import { OrdemServicosService } from './servicos/ordem-servicos.service';
+import { MedicoService } from './servicos/medico.service';
+import { PostoColetaService } from './servicos/posto-coleta.service';
+import { ConvenioService } from './servicos/convenio.service';
+import { PacienteService } from './servicos/paciente.service';
 
 // *******************************
 // Rotas da Aplicação
@@ -16,6 +22,7 @@ const appRoutes: Routes = [
   { path: '', redirectTo: 'consulta-ordens-servico', pathMatch: 'full' },
   { path: 'consulta-ordens-servico', component: ConsultaOrdemServicoComponent },
   { path: 'nova-ordem-servico', component: NovaOrdemServicoComponent },
+  { path: 'ordem-servico-edicao/:id', component: NovaOrdemServicoComponent },
   { path: '**', component: PageNotFoundComponent }  
 ];
 
@@ -28,13 +35,19 @@ const appRoutes: Routes = [
   ],
   imports: [
     BrowserModule,
+    FormsModule,
+    HttpClientModule,
     RouterModule.forRoot(
       appRoutes,
       { enableTracing: true }
     )
   ],
   providers: [
-    OrdemServicosService
+    OrdemServicosService,
+    PostoColetaService,
+    MedicoService,
+    ConvenioService,
+    PacienteService
   ],
   bootstrap: [AppComponent]
 })
