@@ -52,6 +52,11 @@
   <strong>As datas: inicial e final são obrigatórias!</strong>
 </div>
 
+<!-- Msgs de erro/aviso -->
+<div *ngIf="msg != null">
+  <strong>******{{msg}}******</strong>
+</div>
+
 <!-- Tabela com os dados de ordens de serviço-->
 <div *ngIf="ordensServico.length > 0; else nenhumaOrdemServico">
     <div class="row">

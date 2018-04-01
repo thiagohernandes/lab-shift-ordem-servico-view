@@ -20,31 +20,35 @@ export class OrdemServicosService {
                     .catch(this._errorHandler);
   }
 
-  getOrdemServico(id):Observable<IOrdemServico[]>{
+  getOrdemServico(id):Observable<IOrdemServico>{
     return this.http.get<IOrdemServico[]>(this._url_base+'/'+id)
                     .catch(this._errorHandler);
   }
 
   salvarOrdemServico(ordemServico){ 
     return this.http.post(this._url_base+'/nova', ordemServico)
-    .catch(this._errorHandler)
-    .subscribe(res => {this.router.navigate(['/consulta-ordens-servico']);}); 
+    .catch(this._errorHandlerRedirect)
+    .subscribe(res => {this.router.navigate(['/consulta-ordens-servico','Sucesso na gravação']);}); 
   }
 
   alterarOrdemServico(id,ordemServico){ 
     return this.http.put(this._url_base+'/alterar/'+id, ordemServico)
-    .catch(this._errorHandler)
-    .subscribe(res => {this.router.navigate(['/consulta-ordens-servico']);}); 
+    .catch(this._errorHandlerRedirect)
+    .subscribe(res => {this.router.navigate(['/consulta-ordens-servico','Sucesso na alteração']);}); 
   }
 
   apagarOrdemServico(id) {
     return this.http.delete('http://localhost:8080/api/ordens-servico/apagar/'+id)
-    .catch(this._errorHandler)
-    .subscribe(res => {console.log(res)}); 
+    .catch(this._errorHandlerRedirect)
+    .subscribe(res => {console.log(res);this.router.navigate(['/consulta-ordens-servico','Sucesso na exclusão'])}); 
+  }
+
+  _errorHandlerRedirect(error:HttpErrorResponse){
+      return this.router.navigate(['/error-http-methods',error.message || "Server Error"]);
   }
 
   _errorHandler(error:HttpErrorResponse){
-      return Observable.throw(error.message || "Server Error");
+    return Observable.throw(error.message || "Server Error");
   }
 
 }

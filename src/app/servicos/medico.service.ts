@@ -22,6 +22,6 @@ export class MedicoService {
 
   _errorHandler(error:HttpErrorResponse){
     return Observable.throw(error.message || "Server Error");
-}
+  }
 
 }
