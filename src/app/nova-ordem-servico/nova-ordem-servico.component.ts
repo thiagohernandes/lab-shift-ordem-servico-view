@@ -68,37 +68,42 @@ constructor(private _ordemServicoService:OrdemServicosService,
 
   getOrdemServico(id){ 
     this._ordemServicoService.getOrdemServico(id)
-    .subscribe(data => { 
-                this.dadosOrdemServico.data = this.formatarDataYYYYMMDD(data.data);
-                this.currentConvenio.id = data.convenio.id;
-                this.currentPostoColeta.id = data.postoColeta.id;
-                this.currentMedico.id = data.medico.id;
-                this.currentPaciente.id = data.paciente.id;
-                this.currentPaciente.nome = data.paciente.nome;
-                this.currentCodigoOrdemServico = data.id;
-                setTimeout(() => {
-                  this.setarValorConvenioSelect(data.convenio.id);
-                  this.setarValorMedicoSelect(data.medico.id);
-                  this.setarValorPostoColetaSelect(data.postoColeta.id);
-                }, 50);
-                },
-                error => this.msgsErros.push(error));
+    .subscribe(res => { 
+            this.dadosOrdemServico.data = this.formatarDataYYYYMMDD(res.data);
+            this.currentConvenio.id = res.convenio.id;
+            this.currentPostoColeta.id = res.postoColeta.id;
+            this.currentMedico.id = res.medico.id;
+            this.currentPaciente.id = res.paciente.id;
+            this.currentPaciente.nome = res.paciente.nome;
+            this.currentCodigoOrdemServico = res.id;
+            setTimeout(() => { 
+              this.setarValorConvenioSelect(res.convenio.id);
+              this.setarValorMedicoSelect(res.medico.id);
+              this.setarValorPostoColetaSelect(res.postoColeta.id);
+            }, 50);
+            },
+            error => this.msgsErros.push(error));
     
   }
 
-  formatarDataYYYYMMDD(data){
+  formatarDataYYYYMMDD(data){ 
     let dFormat = new Date(data);
     let dd = dFormat.getDate();
     let mm = dFormat.getMonth()+1;     
     let yyyy = dFormat.getFullYear();
-
+    let ddS:string;
+    let mmS:string;
     if(dd<10){
-        dd ='0'+dd;
-    } 
+      ddS ='0'+dd;
+    } else {
+      ddS = dd.toString();
+    }
     if(mm<10){
-        mm ='0'+mm;
-    } 
-    return yyyy+'-'+mm+'-'+dd;
+      mmS ='0'+mm;
+    } else{
+      mmS = mmS.toString();
+    }
+    return yyyy+'-'+mmS+'-'+ddS;
   }
 
   salvarOrdemServico(){  
@@ -140,9 +145,11 @@ constructor(private _ordemServicoService:OrdemServicosService,
 
   setarValorConvenioSelect(id){ 
     for (var i = 0; i < this.convenios.length; i++){
-      if (this.convenios[i].id == id) { 
-        document.getElementById("selectConvenio").options[0].innerHTML = this.convenios[i].id+' - '+this.convenios[i].nome;
-        this.currentConvenio.id = this.convenios[i].id;
+      if (this.convenios[i].id == id) {  
+     let selectConvenioLet = (document.getElementById("selectConvenio") as HTMLSelectElement);
+     selectConvenioLet.options[0].innerHTML = this.convenios[i].id+' - '+this.convenios[i].nome;
+     this.currentConvenio.id = this.convenios[i].id;
+        this.currentConvenio.nome = this.convenios[i].nome;
         this.convenios.splice(i,1);
         break;
       }
@@ -160,7 +167,8 @@ constructor(private _ordemServicoService:OrdemServicosService,
   setarValorPostoColetaSelect(id){
     for (var i = 0; i < this.postosColeta.length; i++){
       if (this.postosColeta[i].codigoPostoColeta == id) { 
-        document.getElementById("selectPostoColeta").options[0].innerHTML = 
+        let selectPostoColetaLet = (document.getElementById("selectPostoColeta") as HTMLSelectElement);
+        selectPostoColetaLet.options[0].innerHTML = 
         this.postosColeta[i].codigoPostoColeta+' - '+this.postosColeta[i].nomePostoColeta+' - '+this.postosColeta[i].localidadePostoColeta;
         this.currentPostoColeta.id = this.postosColeta[i].codigoPostoColeta;
         this.postosColeta.splice(i,1);
@@ -180,8 +188,8 @@ constructor(private _ordemServicoService:OrdemServicosService,
   setarValorMedicoSelect(id){
     for (var i = 0; i < this.medicos.length; i++){
       if (this.medicos[i].codigoMedico == id) { 
-        document.getElementById("selectMedico").options[0].innerHTML = 
-        this.medicos[i].codigoMedico+' - '+this.medicos[i].nomeMedico+' - '+this.medicos[i].especialidadeMedico;
+        let selectMedicoLet = (document.getElementById("selectMedico") as HTMLSelectElement); 
+        selectMedicoLet.options[0].innerHTML = this.medicos[i].codigoMedico+' - '+this.medicos[i].nomeMedico+' - '+this.medicos[i].especialidadeMedico;
         this.currentMedico.id = this.medicos[i].codigoMedico;
         this.medicos.splice(i,1);
         break;

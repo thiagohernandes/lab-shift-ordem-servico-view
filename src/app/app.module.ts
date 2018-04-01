@@ -14,6 +14,7 @@ import { MedicoService } from './servicos/medico.service';
 import { PostoColetaService } from './servicos/posto-coleta.service';
 import { ConvenioService } from './servicos/convenio.service';
 import { PacienteService } from './servicos/paciente.service';
+import { HttpErrorHandlerComponent } from './http-error-handler/http-error-handler.component';
 
 // *******************************
 // Rotas da Aplicação
@@ -21,7 +22,9 @@ import { PacienteService } from './servicos/paciente.service';
 const appRoutes: Routes = [
   { path: '', redirectTo: 'consulta-ordens-servico', pathMatch: 'full' },
   { path: 'consulta-ordens-servico', component: ConsultaOrdemServicoComponent },
+  { path: 'consulta-ordens-servico/:msg', component: ConsultaOrdemServicoComponent },
   { path: 'nova-ordem-servico', component: NovaOrdemServicoComponent },
+  { path: 'error-http-methods/:msg', component: HttpErrorHandlerComponent },
   { path: 'ordem-servico-edicao/:id', component: NovaOrdemServicoComponent },
   { path: '**', component: PageNotFoundComponent }  
 ];
@@ -31,7 +34,8 @@ const appRoutes: Routes = [
     AppComponent,
     ConsultaOrdemServicoComponent,
     PageNotFoundComponent,
-    NovaOrdemServicoComponent
+    NovaOrdemServicoComponent,
+    HttpErrorHandlerComponent
   ],
   imports: [
     BrowserModule,

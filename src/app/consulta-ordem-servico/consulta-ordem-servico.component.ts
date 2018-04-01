@@ -4,6 +4,7 @@ import { Params } from '@angular/router';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { MedicoService } from '../servicos/medico.service';
 import { reject } from 'q';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-consulta-ordem-servico',
@@ -30,12 +31,16 @@ export class ConsultaOrdemServicoComponent implements OnInit {
         nomeMedico: null,
         nomeEspecialidade: null
   };
+  public msg:string = null;
 
   constructor(private _ordemServicoService:OrdemServicosService, 
-              private _medicoService:MedicoService) { }
+              private _medicoService:MedicoService,
+              private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit() { 
-  
+    if(this.route.snapshot.params['msg'] != null && this.route.snapshot.params['msg'] != undefined){
+      this.msg = this.route.snapshot.params['msg'];
+    }
   }
 
   consultarOrdensServico(tipo){ 
@@ -49,6 +54,7 @@ export class ConsultaOrdemServicoComponent implements OnInit {
   }
 
   consultaPaginada(tipo){
+    this.msg = null;
     this.params = new HttpParams({
       fromObject: {
         dataInicial: this.parametrosConsulta.dataInicial,
@@ -103,6 +109,7 @@ export class ConsultaOrdemServicoComponent implements OnInit {
     for(var x =0; x < this.ordensServico.length; x++){
       if(this.ordensServico[x].numeroOrdemServico == id){
         this.ordensServico.splice(x,1);
+        this.msg = 'Sucesso na exclusão';
       }
     }
   }
