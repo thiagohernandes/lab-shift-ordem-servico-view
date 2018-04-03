@@ -44,11 +44,13 @@ export class ConsultaOrdemServicoComponent implements OnInit {
   }
 
   consultarOrdensServico(tipo){ 
+    this.msgErro = [];
     if(this.parametrosConsulta.dataInicial == null || this.parametrosConsulta.dataFinal == null){
       this.msgErro.push('As datas são obrigatórias!');
       return;
-    } else {
-      this.msgErro = [];
+    } else if(this.parametrosConsulta.dataInicial > this.parametrosConsulta.dataFinal){
+      this.msgErro.push('A data inicial não pode ser maior que a final!');
+      return;
     }
     this.consultaPaginada(tipo);
   }
@@ -109,7 +111,6 @@ export class ConsultaOrdemServicoComponent implements OnInit {
     for(var x =0; x < this.ordensServico.length; x++){
       if(this.ordensServico[x].numeroOrdemServico == id){
         this.ordensServico.splice(x,1);
-        this.msg = 'Sucesso na exclusão';
       }
     }
   }
@@ -117,6 +118,4 @@ export class ConsultaOrdemServicoComponent implements OnInit {
   setCurrentOrdemServico(os){
     this.currentOrdemServico = os;
   }
-
-
 }
