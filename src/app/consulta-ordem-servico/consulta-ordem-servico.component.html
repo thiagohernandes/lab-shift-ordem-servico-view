@@ -49,7 +49,9 @@
 
 <!-- Msgs de erro/aviso -->
 <div *ngIf="msgErro.length > 0">
-  <strong>As datas: inicial e final são obrigatórias!</strong>
+    <span *ngFor="let msg of msgErro">
+        <strong>{{msg}}</strong> <br/>
+    </span>
 </div>
 
 <!-- Msgs de erro/aviso -->

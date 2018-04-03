@@ -157,9 +157,14 @@ constructor(private _ordemServicoService:OrdemServicosService,
   }
 
   onSelectConvenio(id) { 
+    if(id == 'Selecione'){
+      this.currentConvenio.id = null;
+      return;
+    }
     for (var i = 0; i < this.convenios.length; i++){
       if (this.convenios[i].id == id) {
         this.currentConvenio.id = this.convenios[i].id;
+        break;
       }
     }
   }
@@ -178,9 +183,14 @@ constructor(private _ordemServicoService:OrdemServicosService,
   } 
 
   onSelectPostoColeta(id) { 
+    if(id == 'Selecione'){
+      this.currentPostoColeta.id = null;
+      return;
+    }
     for (var i = 0; i < this.postosColeta.length; i++){
       if (this.postosColeta[i].codigoPostoColeta == id) {
         this.currentPostoColeta.id = this.postosColeta[i].codigoPostoColeta;
+        break;
       }
     }
   }
@@ -198,9 +208,14 @@ constructor(private _ordemServicoService:OrdemServicosService,
   } 
 
   onSelectMedico(id) { 
+    if(id == 'Selecione'){
+      this.currentMedico.id = null;
+      return;
+    }
     for (var i = 0; i < this.medicos.length; i++){
       if (this.medicos[i].codigoMedico == id) {
         this.currentMedico.id = this.medicos[i].codigoMedico;
+        break;
       }
     }
   }
